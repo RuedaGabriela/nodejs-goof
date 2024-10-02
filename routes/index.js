@@ -36,7 +36,7 @@ exports.index = function (req, res, next) {
 
 exports.loginHandler = function (req, res, next) {
   if (validator.isEmail(req.body.username)) {
-    User.find({ username: req.body.username, password: req.body.password }, function (err, users) {
+    User.find({ username: String(req.body.username), password: String(req.body.password) }, function (err, users) {
       if (users.length > 0) {
         const redirectPage = req.body.redirectPage
         const session = req.session
@@ -188,7 +188,7 @@ exports.create = function (req, res, next) {
 };
 
 exports.destroy = function (req, res, next) {
-  Todo.findById(req.params.id, function (err, todo) {
+  Todo.findById(Number(req.params.id), function (err, todo) {
 
     try {
       todo.remove(function (err, todo) {
@@ -210,13 +210,13 @@ exports.edit = function (req, res, next) {
       res.render('edit', {
         title: 'TODO',
         todos: todos,
-        current: req.params.id
+        current: Number(req.params.id)
       });
     });
 };
 
 exports.update = function (req, res, next) {
-  Todo.findById(req.params.id, function (err, todo) {
+  Todo.findById(Number(req.params.id), function (err, todo) {
 
     todo.content = req.body.content;
     todo.updated_at = Date.now();
